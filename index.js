@@ -6,6 +6,7 @@ const SHARE_COUNT = 5;
 const THRESHOLD = 2;
 
 // Sending Functions
+
 function mnemonicToSSS(mnemonic, password, callback) {
     console.log("inside menmonicToSSS");
     let key = bip39.mnemonicToEntropy(mnemonic);
@@ -69,9 +70,11 @@ function returnArraysOfDataToBeSent(arrayOfReceivers, mnemonic, password, userna
         }
     });
 }
+
 // Sending Function End
 
 //Requesting for Keys
+
 function encryptDataToBeSentForRequest(key, senderPublicKey, receiverPublicKey) {
     let objectToBeEncrypted = {
         key : key,
@@ -110,9 +113,56 @@ function requestKeys(arrayOfReceivers, senderPublicKey, password, username){
         }
     });
 }
+
 //Requesting for Keys End
+
+//Combining Keys
+
+function combinePieces(mnemonicShares, password) {
+    let shares = mnemonicShares;
+    let splitVal = sssa.combine(shares);
+    let encKey = splitVal;
+    return new Promise((resolve, reject) => {
+        var d = crypto.createDecipher("aes128", password);
+        var rawKey = d.update(encKey, "hex", "hex");
+        rawKey += d.final("hex");
+        resolve(bip39.entropyToMnemonic(rawKey));
+    });
+}
+
+function decryptPieceUsingPrivateKey(encrypted, privateKey) {
+    let result = cryptico.decrypt(encrypted, privateKey);
+    return result.plaintext;
+}
+
+function arrayOfKeysReceived(arrayOfPieces, privateKey, password){
+    return new Promise(function (resolve, reject) {
+        if(arrayOfPieces.length !== THRESHOLD){
+            reject("Invalid Length of Array");
+        } else {
+            function todoAfterLoop(array) {
+                combinePieces(array, password)
+                    .then(function (mnemonic) {
+                        resolve(mnemonic);
+                    })
+            }
+            let arrayToBePassed = [];
+            for(let i = 0; i < THRESHOLD; i++){
+                let currPiece = arrayOfPieces[i];
+                let shard = decryptPieceUsingPrivateKey(currPiece, privateKey);
+                arrayToBePassed.push(shard);
+                if(i === THRESHOLD - 1){
+                    todoAfterLoop(arrayToBePassed);
+                }
+            }
+        }
+    });
+}
+
+//Combining Keys End
 
 window.App = {
     Send : returnArraysOfDataToBeSent,
-    Request : requestKeys
+    Request : requestKeys,
+    Combine : arrayOfKeysReceived
 };
