@@ -71,6 +71,48 @@ function returnArraysOfDataToBeSent(arrayOfReceivers, mnemonic, password, userna
 }
 // Sending Function End
 
+//Requesting for Keys
+function encryptDataToBeSentForRequest(key, senderPublicKey, receiverPublicKey) {
+    let objectToBeEncrypted = {
+        key : key,
+        publicKey : senderPublicKey
+    };
+    let buffer = JSON.stringify(objectToBeEncrypted);
+    let encrypted = cryptico.encrypt(receiverPublicKey, buffer);
+    return encrypted.cipher;
+}
+
+function requestKeys(arrayOfReceivers, senderPublicKey, password, username){
+    return new Promise(function (resolve, reject) {
+        function afterLoop(array) {
+            resolve(array);
+        }
+
+        if(arrayOfReceivers.length !== SHARE_COUNT){
+            reject("Invalid Number of Receivers");
+        }else{
+            let arrayToBeReturned = [];
+            for(let i = 0; i < SHARE_COUNT; i++){
+                let receiverPublicKey = arrayOfReceivers.publicKey;
+                let receiverUsername = arrayOfReceivers.username;
+                let receiverLink = arrayOfReceivers.link;
+                let key = createKey(username, receiverUsername, password);
+                let data = encryptDataToBeSentForRequest(key, senderPublicKey, receiverPublicKey);
+                let retVal = {
+                    data : data,
+                    link : receiverLink
+                };
+                arrayToBeReturned.push(retVal);
+                if(i === SHARE_COUNT - 1){
+                    afterLoop(arrayToBeReturned);
+                }
+            }
+        }
+    });
+}
+//Requesting for Keys End
+
 window.App = {
-    Send : returnArraysOfDataToBeSent
+    Send : returnArraysOfDataToBeSent,
+    Request : requestKeys
 };
