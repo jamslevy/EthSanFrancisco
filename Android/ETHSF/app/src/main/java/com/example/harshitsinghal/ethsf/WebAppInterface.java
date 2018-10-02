@@ -17,9 +17,12 @@ public class WebAppInterface
 
 
     @JavascriptInterface
-    public void sendDataAndroid(String str)
+    public String sendDataAndroid(String str)
     {
         Log.d("Data Received", "getData: " + str);
+
+
+        return "Test Success" ;
     }
 
 
