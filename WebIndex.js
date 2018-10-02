@@ -8,14 +8,11 @@ const THRESHOLD = 2;
 // Sending Functions
 
 function mnemonicToSSS(mnemonic, password, callback) {
-    console.log("inside menmonicToSSS");
     let key = bip39.mnemonicToEntropy(mnemonic);
-    console.log("pkey", key);
     return new Promise(function(resolve, reject) {
         let c = crypto.createCipher("aes128", password);
         let encKey = c.update(key, 'hex', 'hex');
         encKey += c.final('hex');
-        // console.log("enckey inside menmonicToSSS", encKey);
         let shares = sssa.create(THRESHOLD, SHARE_COUNT, encKey);
         resolve(shares);
         if(callback) callback(shares);
@@ -123,8 +120,8 @@ function combinePieces(mnemonicShares, password) {
     let splitVal = sssa.combine(shares);
     let encKey = splitVal;
     return new Promise((resolve, reject) => {
-        var d = crypto.createDecipher("aes128", password);
-        var rawKey = d.update(encKey, "hex", "hex");
+        let d = crypto.createDecipher("aes128", password);
+        let rawKey = d.update(encKey, "hex", "hex");
         rawKey += d.final("hex");
         resolve(bip39.entropyToMnemonic(rawKey));
     });
@@ -132,7 +129,7 @@ function combinePieces(mnemonicShares, password) {
 
 function decryptPieceUsingPrivateKey(encrypted, privateKey) {
     let result = cryptico.decrypt(encrypted, privateKey);
-    return result.plaintext;
+    return JSON.parse(result.plaintext);
 }
 
 function arrayOfKeysReceived(arrayOfPieces, privateKey, password){

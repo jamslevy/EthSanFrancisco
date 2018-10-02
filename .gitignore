@@ -3,3 +3,4 @@ yarn.lock
 .idea/
 *.pages
 public_static/
+public_static_phone/
