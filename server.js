@@ -8,6 +8,10 @@ connections = []  ;
 server.listen(process.env.PORT || 3000) ;
 console.log('server running at port 3000');
 app.use('/', express.static('public_static'));
-// app.get('/' , function(req , res){
-//   res.sendFile(__dirname+'/public_static' + '/index.html');
-// });
+
+
+//webview for the android app running on iochat
+app.use('/app',express.static('iochat'))
+io.on('connection', function(socket){
+  console.log('a user connected');
+});
