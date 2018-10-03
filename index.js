@@ -6,7 +6,7 @@ const SHARE_COUNT = 5;
 const THRESHOLD = 2;
 
 // Sending Functions
-
+console.log("inside bundle js");
 function mnemonicToSSS(mnemonic, password, callback) {
     console.log("inside menmonicToSSS");
     let key = bip39.mnemonicToEntropy(mnemonic);
