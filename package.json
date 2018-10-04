@@ -9,6 +9,7 @@
     "sssa-js": "^0.0.1"
   },
   "scripts": {
-    "build": "browserify index.js -o public_static/js/bundle.js"
+    "build": "browserify index.js -o public_static/js/bundle.js",
+    "start": "nodemon server.js"
   }
 }
