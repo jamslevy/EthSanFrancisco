@@ -9,8 +9,8 @@ function encryptShardToSendIt(shard, publicKey) {
     let encrypted = cryptico.encrypt(JSON.stringify(shard), publicKey);
     return encrypted.cipher;
 }
-
 window.App = {
-  decryptObject,
-  encryptShardToSendIt
+    decryptObject,
+    generate : cryptico.generateRSAKey,
+    encryptShardToSendIt
 };

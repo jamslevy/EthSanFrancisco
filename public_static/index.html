@@ -9,9 +9,8 @@
   crossorigin="anonymous"></script>
 
 
-  <script type="text/javascript" src="js/bundle.js">
-
-  </script>
+  <script type="text/javascript" src="./js/bundle.js"></script>
+  <script src="http://192.168.0.60:3000/socket.io/socket.io.js"></script>
 </head>
 <body>
   <section id="send-keys">
@@ -20,7 +19,7 @@
     </div>
     <div id="backup-seed-phrase">
       <form class="seed-phrase" action="index.html" method="post">
-        <input type="text" name="seedphrase" placeholder="enter your seed phrase" id="input-new-seedphrase">
+        <input type="text" name="seedphrase" placeholder="enter your seed phrase" id="seedphrase">
         <input type="submit" name="submit" value="submit" id="submit-new-seedphrase">
       </form>
     </div>

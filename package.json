@@ -7,11 +7,12 @@
     "express": "^4.16.3",
     "mongodb": "^3.1.6",
     "socket.io": "^2.1.1",
-    "sssa-js": "^0.0.1"
+    "sssa-js": "^0.0.1",
+    "watchify": "^3.11.0"
   },
   "scripts": {
-    "build-web": "browserify WebIndex.js -o public_static/js/bundle.js",
-    "build-phone": "browserify PhoneIndex.js -o iochat/js/bundle.js",
+    "build-web": "watchify WebIndex.js -o public_static/js/bundle.js",
+    "build-phone": "watchify PhoneIndex.js -o iochat/js/bundle.js",
     "start": "nodemon server.js"
   }
 }

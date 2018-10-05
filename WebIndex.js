@@ -29,14 +29,17 @@ function createKey(usernameOfHolder, usernameOfSaver, password) {
 
 function encryptKeyValuePairUsingPublicKey(key, value, publicKey) {
     let objectToBeEncrypted = {
-        key : value
+        identity : key,
+        shard : value
     };
+
     let buffer = JSON.stringify(objectToBeEncrypted);
     let encrypted = cryptico.encrypt(publicKey, buffer);
     return encrypted.cipher;
 }
 
 function returnArraysOfDataToBeSent(arrayOfReceivers, mnemonic, password, username) {
+    console.log(arrayOfReceivers);
     return new Promise(function (resolve, reject) {
         function afterLoop(array) {
             resolve(array);
@@ -49,14 +52,14 @@ function returnArraysOfDataToBeSent(arrayOfReceivers, mnemonic, password, userna
                 .then(function (shares) {
                     let arrayToBeReturned = [];
                     for(let i = 0; i < SHARE_COUNT; i++){
-                        let receiverPublicKey = arrayOfReceivers.publicKey;
-                        let receiverUsername = arrayOfReceivers.username;
-                        let receiverLink = arrayOfReceivers.link;
+                        let receiverPublicKey = arrayOfReceivers[i].publicKey;
+                        let receiverUsername = arrayOfReceivers[i].username;
+                        // let receiverLink = arrayOfReceivers.link;
                         let key = createKey(username, receiverUsername, password);
                         let data = encryptKeyValuePairUsingPublicKey(key, shares[i], receiverPublicKey);
                         let retVal = {
                             data : data,
-                            link : receiverLink
+                            username : receiverUsername
                         };
                         arrayToBeReturned.push(retVal);
                         if(i === SHARE_COUNT - 1){

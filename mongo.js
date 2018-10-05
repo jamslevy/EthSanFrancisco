@@ -110,8 +110,3 @@ module.exports = {
         });
     }
 };
-
-module.exports.connect().then(function () {
-    console.log("connected");
-    module.exports.checkAndroidUser('abc');
-});
