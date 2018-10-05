@@ -27,6 +27,8 @@ io.on('connection', function(socket){
   console.log(socket.id);
 
   socket.on('disconnect',function(data){
+    console.log('inside disconnect');
+    console.log(data);
     let self = this
     temp = nodes.find(function(obj){
 
@@ -56,6 +58,11 @@ io.on('connection', function(socket){
     mongo.addAndroidUser(data.clientId,"",data.publicKey)
     console.log(nodes.length);
   })
+  socket.on('login user',function(data){
+    nodes.push({clientId: data.clientId, socket: socket});
+    console.log('user logged in successfully');
+    console.log(socket.id);
+  })
 
   // for webapp
 
@@ -71,6 +78,19 @@ io.on('connection', function(socket){
     })
   });
   socket.on('send shards', function(array){
-    // array.forEach(function)
+    console.log('***');
+    console.log(array);
+    console.log('***');
+    array.forEach(function(element){
+      console.log(element);
+      correct_node= nodes.find(function(incorrect_node){
+        console.log('incorrect_node');
+        return incorrect_node.clientId == element.username;
+      });
+      correct_socket = correct_node.socket;
+      console.log("correct_socket id", correct_socket.id);
+      correct_socket.emit('send shard to android',element.data);
+      console.log(element);
+    })
   })
 });

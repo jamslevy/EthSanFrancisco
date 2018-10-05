@@ -1,4 +1,6 @@
+var PVTKEY;
 $(function(){
+
   console.log('document ready');
 
 
@@ -35,16 +37,41 @@ $(function(){
           console.log(passPhrase);
           pvtKey = window.App.generateRSAKey(passPhrase,256);
           // android call to save this pvtKey to database
+          PVTKEY = pvtKey;
+          localStorage.setItem(username,JSON.stringify(pvtKey.toJSON()));
           publicKey = window.App.publicKeyString(pvtKey);
           socket.emit('setNewDevice',{clientId: username, publicKey: publicKey});
           alert("your device is now Registered");
-          window.location.href = 'http://localhost:3000/app/registered'
+          $('h1').html('Your device is now registered');
+          $('form').html('');
+
+
+
 
 
         }
       })
-    })
+    });
 
+
+  })
+
+  $('a').click(function(e){
+    var username = $('input[name="username"]').val();
+    e.preventDefault();
+    socket = io();
+    socket.on('connect',function(){
+      pvtKey_string = localStorage.getItem(username);
+      PVTKEY = window.App.RSAParse(pvtKey_string);
+      publicKey = window.App.publicKeyString(PVTKEY);
+      socket.emit('login user',{clientId: username, publicKey: publicKey})
+    });
+    socket.on('send shard to android',function(data){
+      console.log("inside send shard to android");
+      console.log(data);
+    });
+    $('form').html('');
+    $('h1').html('Your device is now logged in');
   })
 
 })

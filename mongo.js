@@ -16,8 +16,13 @@ module.exports = {
                     self.obj.collection(androidCollection).count(function (err, count) {
                         if(err) throw err;
                         if(count >= 1){
+                          console.log("inside if");
                             self.currentIndex = count - 1;
                             resolve(true);
+                        }else{
+                          console.log("inside else");
+                          self.currentIndex = -1;
+                          resolve(true);
                         }
                     });
                 }

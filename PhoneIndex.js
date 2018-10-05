@@ -9,13 +9,6 @@ function encryptShardToSendIt(shard, publicKey) {
     let encrypted = cryptico.encrypt(JSON.stringify(shard), publicKey);
     return encrypted.cipher;
 }
-<<<<<<< Updated upstream
-window.App = {
-    decryptObject,
-    generate : cryptico.generateRSAKey,
-    encryptShardToSendIt
-};
-=======
 generateRSAKey = cryptico.generateRSAKey;
 publicKeyString = cryptico.publicKeyString;
 
@@ -30,4 +23,3 @@ window.App = {
 
 
 };
->>>>>>> Stashed changes
