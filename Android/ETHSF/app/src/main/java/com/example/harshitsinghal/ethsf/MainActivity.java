@@ -12,10 +12,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         WebView browser = (WebView)findViewById(R.id.browser) ;
+
         browser.getSettings().setJavaScriptEnabled(true);
+
         browser.addJavascriptInterface(new WebAppInterface(getBaseContext()) , "Android");
 
-        browser.loadUrl("http://10.0.2.2:3000/");
+        browser.loadUrl("http://192.168.0.61:3000/");
 
 
     }

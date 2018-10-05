@@ -5,7 +5,7 @@ var io = require('socket.io').listen(server);
 users = [] ;
 connections = []  ;
 
-server.listen(process.env.PORT || 3000) ;
+server.listen(process.env.PORT || 3000 , "0.0.0.0") ;
 
 console.log("server running");
 

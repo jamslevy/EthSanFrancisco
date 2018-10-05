@@ -4,3 +4,4 @@ yarn.lock
 *.pages
 iochat/js/bundle.js
 public_static/js/bundle.js
+.DS_Store

@@ -70,11 +70,9 @@ function returnArraysOfDataToBeSent(arrayOfReceivers, mnemonic, password, userna
         }
     });
 }
-
 // Sending Function End
 
 //Requesting for Keys
-
 function encryptDataToBeSentForRequest(key, senderPublicKey, receiverPublicKey) {
     let objectToBeEncrypted = {
         key : key,
@@ -98,12 +96,12 @@ function requestKeys(arrayOfReceivers, senderPublicKey, password, username){
             for(let i = 0; i < SHARE_COUNT; i++){
                 let receiverPublicKey = arrayOfReceivers.publicKey;
                 let receiverUsername = arrayOfReceivers.username;
-                let receiverLink = arrayOfReceivers.link;
+                // let receiverLink = arrayOfReceivers.link;
                 let key = createKey(username, receiverUsername, password);
                 let data = encryptDataToBeSentForRequest(key, senderPublicKey, receiverPublicKey);
                 let retVal = {
                     data : data,
-                    link : receiverLink
+                    username : username
                 };
                 arrayToBeReturned.push(retVal);
                 if(i === SHARE_COUNT - 1){
@@ -113,11 +111,9 @@ function requestKeys(arrayOfReceivers, senderPublicKey, password, username){
         }
     });
 }
-
 //Requesting for Keys End
 
 //Combining Keys
-
 function combinePieces(mnemonicShares, password) {
     let shares = mnemonicShares;
     let splitVal = sssa.combine(shares);
@@ -158,11 +154,20 @@ function arrayOfKeysReceived(arrayOfPieces, privateKey, password){
         }
     });
 }
-
 //Combining Keys End
+
+function generateKeys(){
+    let RSAKey = cryptico.generateRSAKey(new Date().getTime(), 256);
+    let publicKey = cryptico.publicKeyString(RSAKey);
+    return {
+        privateKey : RSAKey,
+        publicKey : publicKey
+    }
+}
 
 window.App = {
     Send : returnArraysOfDataToBeSent,
     Request : requestKeys,
-    Combine : arrayOfKeysReceived
+    Combine : arrayOfKeysReceived,
+    Generate : generateKeys
 };
