@@ -6,16 +6,13 @@ const SHARE_COUNT = 5;
 const THRESHOLD = 2;
 
 // Sending Functions
-
+console.log("inside bundle js");
 function mnemonicToSSS(mnemonic, password, callback) {
-    console.log("inside menmonicToSSS");
     let key = bip39.mnemonicToEntropy(mnemonic);
-    console.log("pkey", key);
     return new Promise(function(resolve, reject) {
         let c = crypto.createCipher("aes128", password);
         let encKey = c.update(key, 'hex', 'hex');
         encKey += c.final('hex');
-        // console.log("enckey inside menmonicToSSS", encKey);
         let shares = sssa.create(THRESHOLD, SHARE_COUNT, encKey);
         resolve(shares);
         if(callback) callback(shares);
@@ -32,14 +29,17 @@ function createKey(usernameOfHolder, usernameOfSaver, password) {
 
 function encryptKeyValuePairUsingPublicKey(key, value, publicKey) {
     let objectToBeEncrypted = {
-        key : value
+        identity : key,
+        shard : value
     };
+
     let buffer = JSON.stringify(objectToBeEncrypted);
     let encrypted = cryptico.encrypt(publicKey, buffer);
     return encrypted.cipher;
 }
 
 function returnArraysOfDataToBeSent(arrayOfReceivers, mnemonic, password, username) {
+    console.log(arrayOfReceivers);
     return new Promise(function (resolve, reject) {
         function afterLoop(array) {
             resolve(array);
@@ -52,14 +52,14 @@ function returnArraysOfDataToBeSent(arrayOfReceivers, mnemonic, password, userna
                 .then(function (shares) {
                     let arrayToBeReturned = [];
                     for(let i = 0; i < SHARE_COUNT; i++){
-                        let receiverPublicKey = arrayOfReceivers.publicKey;
-                        let receiverUsername = arrayOfReceivers.username;
-                        let receiverLink = arrayOfReceivers.link;
+                        let receiverPublicKey = arrayOfReceivers[i].publicKey;
+                        let receiverUsername = arrayOfReceivers[i].username;
+                        // let receiverLink = arrayOfReceivers.link;
                         let key = createKey(username, receiverUsername, password);
                         let data = encryptKeyValuePairUsingPublicKey(key, shares[i], receiverPublicKey);
                         let retVal = {
                             data : data,
-                            link : receiverLink
+                            username : receiverUsername
                         };
                         arrayToBeReturned.push(retVal);
                         if(i === SHARE_COUNT - 1){
@@ -123,8 +123,8 @@ function combinePieces(mnemonicShares, password) {
     let splitVal = sssa.combine(shares);
     let encKey = splitVal;
     return new Promise((resolve, reject) => {
-        var d = crypto.createDecipher("aes128", password);
-        var rawKey = d.update(encKey, "hex", "hex");
+        let d = crypto.createDecipher("aes128", password);
+        let rawKey = d.update(encKey, "hex", "hex");
         rawKey += d.final("hex");
         resolve(bip39.entropyToMnemonic(rawKey));
     });
@@ -132,7 +132,7 @@ function combinePieces(mnemonicShares, password) {
 
 function decryptPieceUsingPrivateKey(encrypted, privateKey) {
     let result = cryptico.decrypt(encrypted, privateKey);
-    return result.plaintext;
+    return JSON.parse(result.plaintext);
 }
 
 function arrayOfKeysReceived(arrayOfPieces, privateKey, password){
