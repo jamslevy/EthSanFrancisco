@@ -102,9 +102,15 @@
 
 
       // frontend calls for java function
-      var result = Android.sendDataAndroid(JSON.stringify(data));
 
-      $chat.append('<div class="well"><strong>' + result+  '</strong> : ' + result + '</div>');
+      var obj = {} ;
+
+      obj[data.user] = data.msg ;
+
+
+      Android.sendNewShard(JSON.stringify(obj));
+
+
 
     });
 
