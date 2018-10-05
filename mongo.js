@@ -13,7 +13,7 @@ module.exports = {
                 if(err) reject(err);
                 else {
                     self.obj = database.db(DbName);
-                    self.obj.collection(androidCollection).connect(function (err, count) {
+                    self.obj.collection(androidCollection).count(function (err, count) {
                         if(err) throw err;
                         if(count >= 1){
                             self.currentIndex = count - 1;
