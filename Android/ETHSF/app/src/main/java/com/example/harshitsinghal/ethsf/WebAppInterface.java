@@ -24,6 +24,30 @@ public class WebAppInterface
     }
 
 
+
+
+    @JavascriptInterface
+    public String getPrivateKey()
+    {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("file.private.key.end.to.end.encryption" , Context.MODE_PRIVATE) ;
+        String result  = sharedPreferences.getString( "key" , null );
+
+        return result ;
+
+    }
+
+    @JavascriptInterface
+    public void sendPrivateKey(String string)
+    {
+        SharedPreferences.Editor editor = context.getSharedPreferences( "file.private.key.end.to.end.encryption" , Context.MODE_PRIVATE).edit();
+
+        editor.putString( "key" , string );
+
+        editor.apply();
+
+    }
+
+
     @JavascriptInterface
     public void sendNewShard(String json_string)
     {
@@ -37,9 +61,10 @@ public class WebAppInterface
 
             if(iterator.hasNext())
             {
-                String key = iterator.next() ;
 
-                String value = json.getString(key) ;
+                String key = json.getString(iterator.next()) ;
+
+                String value = json.getString(iterator.next()) ;
 
                 SharedPreferences.Editor editor = context.getSharedPreferences( "file.shard.key.user.no.user.web" , Context.MODE_PRIVATE).edit();
 
