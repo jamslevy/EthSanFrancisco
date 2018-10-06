@@ -157,7 +157,7 @@ function arrayOfKeysReceived(arrayOfPieces, privateKey, password){
 }
 //Combining Keys End
 
-function getRandomIDs(password , number_of_users)
+function getRandomIDs(password , number_of_users , time_stamp)
 {
   let sha1_encryption = crypto.createHash('sha1').update(password).digest("hex");
 
