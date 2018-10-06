@@ -2,7 +2,7 @@ $(function(){
     let privateKey;
     function selectUsersFromPassword(password, count) {
         return new Promise(function (resolve, reject) {
-            resolve([0, 1, 2, 3, 4]);
+            resolve([0, 1, 2]);
         });
     }
 
@@ -17,7 +17,7 @@ $(function(){
     submit_new_seedphrase.click(function(e){
         e.preventDefault();
         var input_new_seedphrase = $('#seedphrase').val();
-        const socket = io('http://192.168.0.60:3000');
+        const socket = io('http://10.7.12.105:3000');
         socket.on('connect', function () {
             console.log("Connected for Splitting IO");
             socket.emit('get user count');
@@ -29,7 +29,7 @@ $(function(){
                             window.App.Send(array, input_new_seedphrase, SAMPLE_PASSWORD, SAMPLE_USERNAME)
                                 .then(function (arrayReturn) {
                                     console.log(arrayReturn);
-                                    socket.emit('send shards', array);
+                                    socket.emit('send shards', arrayReturn);
                                 });
                         }
                         let arrayOfData = [];
