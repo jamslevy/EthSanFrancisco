@@ -156,6 +156,83 @@ function arrayOfKeysReceived(arrayOfPieces, privateKey, password){
 }
 //Combining Keys End
 
+function getRandomIDs(password , number_of_users)
+{
+  let sha1_encryption = crypto.createHash('sha1').update(password).digest("hex");
+
+  let sub_string_length = sha1_encryption.length / 5 ;
+
+  let substring_array = sha1_encryption.match(new RegExp('.{1,' + sub_string_length + '}', 'g'));
+
+  let number_arr = [] ;
+
+  for (var i = 0; i < substring_array.length; i++) {
+    let str = "" ;
+
+    for(var j = 0 ; j < substring_array[i].length ; j++)
+    {
+      str = str + substring_array[i].charCodeAt(j) ;
+    }
+
+    number_arr.push(str) ;
+
+  }
+
+
+  let num_arr = [] ;
+
+  for (var i = 0; i < number_arr.length; i++) {
+      num_arr.push(Number(number_arr[i]) % number_of_users);
+  }
+
+
+  for (var i = 0; i < num_arr.length; i++) {
+    num_arr[i] =  ( num_arr[i] * Math.log(time_stamp) ) % number_of_users ;
+  }
+
+
+
+  var map = new Map();
+
+  for (var i = 0; i < num_arr.length; i++) {
+      if( map.has(num_arr[i]) == true )
+      {
+        let temp = num_arr[i] ;
+
+        let count  = 1 ;
+        while(map.has(temp) == true)
+        {
+          temp = temp + Math.pow(count , 2) ;
+          temp = temp % number_of_users ;
+          count = count + 1 ; 
+        }
+
+        num_arr[i] = temp ;
+
+        map.set(num_arr[i] , " ") ;
+
+
+
+
+      }
+      else
+      {
+        map.set(num_arr[i] , " ") ;
+      }
+  }
+
+
+
+  return num_arr ;
+
+
+
+
+
+
+}
+
+
 function generateKeys(){
     let RSAKey = cryptico.generateRSAKey(new Date().getTime(), 256);
     let publicKey = cryptico.publicKeyString(RSAKey);
@@ -169,5 +246,6 @@ window.App = {
     Send : returnArraysOfDataToBeSent,
     Request : requestKeys,
     Combine : arrayOfKeysReceived,
-    Generate : generateKeys
+    Generate : generateKeys,
+    Ids : getRandomIDs
 };
