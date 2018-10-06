@@ -1,6 +1,6 @@
 var PVTKEY;
 $(function(){
-
+var socket
   console.log('document ready');
 
 
@@ -71,12 +71,32 @@ $(function(){
 
       console.log(data);
       decrypted_object = window.App.decryptObject(data,PVTKEY);
+      localStorage.setItem(decrypted_object.identity,decrypted_object.shard);
       //andriod code to store this object
+
       console.log(decrypted_object);
 
     });
     $('form').html('');
     $('h1').html('Your device is now logged in');
+    waitForRequest(socket)
   })
+  function waitForRequest(socket) {
+    socket.on('request shard from android',function(data){
+      console.log("inside request shard from android");
+      decrypted_object = window.App.decryptObject(data,PVTKEY);
+      console.log('decrypted_object', decrypted_object);
+
+      shard_to_be_sent = localStorage.getItem(decrypted_object.key);
+      console.log(shard_to_be_sent);
+      user_to_be_sent = decrypted_object.username
+       encrypted_shard = window.App.encryptShardToSendIt(shard_to_be_sent, decrypted_object.publicKey);
+
+       console.log(encrypted_shard);
+       socket.emit('send shard to user',{user_to_be_sent: user_to_be_sent, encrypted_shard: encrypted_shard});
+
+    })
+  }
+
 
 })

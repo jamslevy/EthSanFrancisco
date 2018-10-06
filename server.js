@@ -82,9 +82,10 @@ io.on('connection', function(socket){
     console.log(array);
     console.log('***');
     array.forEach(function(element){
-      console.log(element);
+
+      console.log('length of nodes',nodes.length);
       correct_node= nodes.find(function(incorrect_node){
-        console.log('incorrect_node');
+        console.log('incorrect_node clientID', incorrect_node.clientId);
         return incorrect_node.clientId == element.username;
       });
       correct_socket = correct_node.socket;
@@ -92,5 +93,23 @@ io.on('connection', function(socket){
       correct_socket.emit('send shard to android',element.data);
       console.log(element);
     })
+  })
+  socket.on('request shards',function(array){
+    array.forEach(function(element){
+      correct_node = nodes.find(function(incorrect_node){
+        return incorrect_node.clientId == element.username;
+      });
+      correct_socket = correct_node.socket;
+      correct_socket.emit('request shard from android', element.data);
+
+    })
+  })
+  socket.on('send shard to user',function(data){
+    console.log('inside send shard to user',data);
+    correct_node = nodes.find(function(incorrect_node){
+      return incorrect_node.clientId == data.user_to_be_sent;
+    });
+    correct_socket = correct_node.socket;
+    correct_socket.emit('send encrypted shard to user',data.encrypted_shard)
   })
 });

@@ -17,7 +17,7 @@ $(function(){
     submit_new_seedphrase.click(function(e){
         e.preventDefault();
         var input_new_seedphrase = $('#seedphrase').val();
-        const socket = io('http://10.7.12.105:3000');
+        const socket = io();
         socket.on('connect', function () {
             console.log("Connected for Splitting IO");
             socket.emit('get user count');

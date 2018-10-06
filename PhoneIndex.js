@@ -8,7 +8,8 @@ function decryptObject(encrypted, privateKey) {
 
 function encryptShardToSendIt(shard, publicKey) {
 
-    let encrypted = cryptico.encrypt(JSON.stringify(shard), publicKey);
+    let encrypted = cryptico.encrypt(shard, publicKey);
+    console.log(encrypted);
     return encrypted.cipher;
 }
 generateRSAKey = cryptico.generateRSAKey;
