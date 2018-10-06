@@ -2,7 +2,7 @@ $(function(){
     let privateKey;
     function selectUsersFromPassword(password, count) {
         return new Promise(function (resolve, reject) {
-            resolve([0, 1, 2, 3, 4]);
+            resolve([0, 1, 2]);
         });
     }
 
@@ -17,7 +17,7 @@ $(function(){
     submit_new_seedphrase.click(function(e){
         e.preventDefault();
         var input_new_seedphrase = $('#seedphrase').val();
-        const socket = io('http://192.168.0.60:3000');
+        const socket = io();
         socket.on('connect', function () {
             console.log("Connected for Splitting IO");
             socket.emit('get user count');
@@ -29,7 +29,7 @@ $(function(){
                             window.App.Send(array, input_new_seedphrase, SAMPLE_PASSWORD, SAMPLE_USERNAME)
                                 .then(function (arrayReturn) {
                                     console.log(arrayReturn);
-                                    socket.emit('send shards', array);
+                                    socket.emit('send shards', arrayReturn);
                                 });
                         }
                         let arrayOfData = [];
@@ -57,7 +57,7 @@ $(function(){
     // Receive Seed Phrase
     get_seedphrase.click(function (e) {
         e.preventDefault();
-        const socket = io('http://192.168.0.60:3000');
+        const socket = io('http://10.7.12.105:3000');
         const keyPair = window.App.Generate();
         privateKey = keyPair.privateKey;
         const publicKey = keyPair.publicKey;
@@ -67,9 +67,17 @@ $(function(){
                 selectUsersFromPassword(SAMPLE_PASSWORD, count)
                     .then(function (arrayWithIndices) {
                         function afterLoop(array){
+                            // console.log(array);
                             window.App.Request(array, publicKey, SAMPLE_PASSWORD, SAMPLE_USERNAME)
                                 .then(function (arrayReturn) {
+                                    // console.log(arrayReturn);
+                                    socket.emit('login user', {
+                                       clientId : SAMPLE_USERNAME,
+                                       publicKey : publicKey
+                                    });
+                                    console.log("publicKey" , publicKey);
                                     socket.emit('request shards', arrayReturn);
+                                    receivingShards();
                                 })
                         }
                         let arrayOfData = [];
@@ -91,10 +99,19 @@ $(function(){
                 socket.emit('get user data', index);
             }
         });
-
+        let shardsArray = [];
+        let already = false;
         function receivingShards() {
-            socket.on('shards', function (shards) {
-
+            socket.on('send encrypted shard to user', function (encryptedShard) {
+                if(shardsArray.length < 2){
+                    shardsArray.push(encryptedShard);
+                    console.log(shardsArray);
+                }
+                if(shardsArray.length === 2 && !already){
+                    already = true;
+                    let x = window.App.Combine(shardsArray, privateKey, SAMPLE_PASSWORD);
+                    console.log(x);
+                }
             });
         }
     })

@@ -2,24 +2,20 @@ const cryptico = require('cryptico');
 
 function decryptObject(encrypted, privateKey) {
     let result = cryptico.decrypt(encrypted, privateKey);
+    console.log(result);
     return JSON.parse(result.plaintext);
 }
 
 function encryptShardToSendIt(shard, publicKey) {
-    let encrypted = cryptico.encrypt(JSON.stringify(shard), publicKey);
+
+    let encrypted = cryptico.encrypt(shard, publicKey);
+    console.log(encrypted);
     return encrypted.cipher;
 }
-<<<<<<< Updated upstream
-window.App = {
-    decryptObject,
-    generate : cryptico.generateRSAKey,
-    encryptShardToSendIt
-};
-=======
 generateRSAKey = cryptico.generateRSAKey;
 publicKeyString = cryptico.publicKeyString;
 
-RSAParse = cryptico.RSAKey.parse
+RSAParse = cryptico.RSAKey.parse;
 
 window.App = {
   decryptObject,
@@ -30,4 +26,3 @@ window.App = {
 
 
 };
->>>>>>> Stashed changes
