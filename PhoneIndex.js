@@ -2,10 +2,12 @@ const cryptico = require('cryptico');
 
 function decryptObject(encrypted, privateKey) {
     let result = cryptico.decrypt(encrypted, privateKey);
+    console.log(result);
     return JSON.parse(result.plaintext);
 }
 
 function encryptShardToSendIt(shard, publicKey) {
+
     let encrypted = cryptico.encrypt(JSON.stringify(shard), publicKey);
     return encrypted.cipher;
 }

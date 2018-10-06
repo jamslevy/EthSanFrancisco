@@ -35,7 +35,7 @@ $(function(){
           console.log("username is correct");
           passPhrase = new Date().getTime().toString()
           console.log(passPhrase);
-          pvtKey = window.App.generateRSAKey(passPhrase,256);
+          pvtKey = window.App.generateRSAKey(passPhrase,512);
           // android call to save this pvtKey to database
           PVTKEY = pvtKey;
           localStorage.setItem(username,JSON.stringify(pvtKey.toJSON()));
@@ -68,7 +68,12 @@ $(function(){
     });
     socket.on('send shard to android',function(data){
       console.log("inside send shard to android");
+
       console.log(data);
+      decrypted_object = window.App.decryptObject(data,PVTKEY);
+      //andriod code to store this object
+      console.log(decrypted_object);
+
     });
     $('form').html('');
     $('h1').html('Your device is now logged in');
