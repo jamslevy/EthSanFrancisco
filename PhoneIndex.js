@@ -12,7 +12,7 @@ function encryptShardToSendIt(shard, publicKey) {
 generateRSAKey = cryptico.generateRSAKey;
 publicKeyString = cryptico.publicKeyString;
 
-RSAParse = cryptico.RSAKey.parse
+RSAParse = cryptico.RSAKey.parse;
 
 window.App = {
   decryptObject,
