@@ -223,6 +223,11 @@ function getRandomIDs(password , number_of_users , time_stamp)
   }
 
 
+  for (var i = 0; i < num_arr.length; i++) {
+    num_arr[i] = Math.floor(num_arr[i]) ; 
+  }
+
+
 
   return num_arr ;
 
