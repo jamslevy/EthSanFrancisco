@@ -2,7 +2,9 @@ package com.example.harshitsinghal.ethsf;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,8 +19,19 @@ public class MainActivity extends AppCompatActivity {
 
         browser.addJavascriptInterface(new WebAppInterface(getBaseContext()) , "Android");
 
-        browser.loadUrl("http://192.168.0.61:3000/");
+
+        browser.setWebChromeClient(new WebChromeClient());
+
+        browser.setWebViewClient(new WebViewClient() {
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                view.loadUrl(url);
+                return true;
+            }
+        });
 
 
+        browser.loadUrl("http://10.7.12.105:3000/app");
     }
 }

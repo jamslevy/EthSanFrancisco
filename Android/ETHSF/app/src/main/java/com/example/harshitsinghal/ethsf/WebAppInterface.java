@@ -29,6 +29,8 @@ public class WebAppInterface
     @JavascriptInterface
     public String getPrivateKey()
     {
+        Toast.makeText(context , "requested PK" , Toast.LENGTH_LONG).show();
+
         SharedPreferences sharedPreferences = context.getSharedPreferences("file.private.key.end.to.end.encryption" , Context.MODE_PRIVATE) ;
         String result  = sharedPreferences.getString( "key" , null );
 
@@ -45,6 +47,8 @@ public class WebAppInterface
 
         editor.apply();
 
+        Toast.makeText(context , "Got PK" , Toast.LENGTH_LONG).show();
+
     }
 
 
@@ -52,6 +56,7 @@ public class WebAppInterface
     public void sendNewShard(String json_string)
     {
 
+        Toast.makeText(context , "send shard" , Toast.LENGTH_LONG).show();
 
         try
         {
@@ -94,6 +99,8 @@ public class WebAppInterface
     @JavascriptInterface
     public String requestForShard(String key)
     {
+        Toast.makeText(context , "request shard" , Toast.LENGTH_LONG).show();
+
 
 
         SharedPreferences sharedPreferences = context.getSharedPreferences("file.shard.key.user.no.user.web" , Context.MODE_PRIVATE) ;
