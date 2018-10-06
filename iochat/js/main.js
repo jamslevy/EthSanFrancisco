@@ -4,20 +4,31 @@ var socket
   console.log('document ready');
   // alert(Android);
 
+var registration_button = $('.show-form-button').first();
+var login_button = $('.show-form-button').last()
+  $('.show-form-button').click(function(){
 
-  $('#show-form-button').click(function(){
 
-    $(this).css('display','none');
-    $('#registration-form').removeClass('hidden')
+    $('form').removeClass('hidden');
+    console.log($(this).html());
+    if($(this).html() != 'Register this device'){
+      registration_button.removeClass('hidden')
+      login_button.addClass('hidden')
+      $('#device-login-button').removeClass('hidden');
+      $('#device-registration-button').addClass('hidden');
+      console.log("inside if");
+    }else{
+      registration_button.addClass('hidden')
+      login_button.removeClass('hidden')
+      console.log("inside else");
+      $('#device-registration-button').removeClass('hidden');
+      $('#device-login-button').addClass('hidden');
+    }
   })
 
   $('#device-registration-button').click(function(e){
     e.preventDefault();
-    console.log("here ");
     var username = $('input[name="username"]').val();
-
-
-
     socket = io();
     socket.on('connect',function(){
       socket.emit("verify username", {username: username})
@@ -91,7 +102,7 @@ var socket
 
   })
 
-  $('a').click(function(e){
+  $('#device-login-button').click(function(e){
     var username = $('input[name="username"]').val();
     e.preventDefault();
     socket = io();
