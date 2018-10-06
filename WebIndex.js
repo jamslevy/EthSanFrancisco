@@ -2,7 +2,7 @@ const bip39 = require('bip39');
 const crypto = require('crypto');
 const sssa = require('sssa-js');
 const cryptico = require('cryptico');
-const SHARE_COUNT = 5;
+const SHARE_COUNT = 3;
 const THRESHOLD = 2;
 
 // Sending Functions
@@ -34,12 +34,12 @@ function encryptKeyValuePairUsingPublicKey(key, value, publicKey) {
     };
 
     let buffer = JSON.stringify(objectToBeEncrypted);
-    let encrypted = cryptico.encrypt(publicKey, buffer);
+    let encrypted = cryptico.encrypt(buffer, publicKey);
     return encrypted.cipher;
 }
 
 function returnArraysOfDataToBeSent(arrayOfReceivers, mnemonic, password, username) {
-    console.log(arrayOfReceivers);
+    console.log("array of Receo", arrayOfReceivers);
     return new Promise(function (resolve, reject) {
         function afterLoop(array) {
             resolve(array);
@@ -79,7 +79,7 @@ function encryptDataToBeSentForRequest(key, senderPublicKey, receiverPublicKey) 
         publicKey : senderPublicKey
     };
     let buffer = JSON.stringify(objectToBeEncrypted);
-    let encrypted = cryptico.encrypt(receiverPublicKey, buffer);
+    let encrypted = cryptico.encrypt(buffer, receiverPublicKey);
     return encrypted.cipher;
 }
 
