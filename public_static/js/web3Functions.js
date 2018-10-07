@@ -98,18 +98,24 @@ function addAndroidUser(username) {
     });
 }
 
-function splitKey(username) {
+function splitKey(username,callback) {
+    console.log(username);
     contract.splitKey(username, {
         from: self,
         gas: 500000,
         gasPrice: web3.toWei(40,'gwei')
     }, function (err, result) {
         if(err) throw err;
+        if(callback) callback();
         console.log("result", result);
     })
 }
 
 function privateKeyRegenerated(user1, user2, self_user) {
+    if(web3.eth.accounts.length == 0){
+      alert("Metamask not logged in please do it and then click again...");
+      return;
+    }
     contract.privateKeyRegenerated(user1, user2, self_user, {
         from: self,
         gas: 500000,
@@ -119,4 +125,3 @@ function privateKeyRegenerated(user1, user2, self_user) {
         console.log("result", result);
     })
 }
-

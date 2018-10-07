@@ -110,6 +110,6 @@ io.on('connection', function(socket){
       return incorrect_node.clientId == data.user_to_be_sent;
     });
     correct_socket = correct_node.socket;
-    correct_socket.emit('send encrypted shard to user',data.encrypted_shard)
+    correct_socket.emit('send encrypted shard to user',data.encrypted_object)
   })
 });

@@ -136,19 +136,34 @@ function arrayOfKeysReceived(arrayOfPieces, privateKey, password){
         if(arrayOfPieces.length !== THRESHOLD){
             reject("Invalid Length of Array");
         } else {
-            function todoAfterLoop(array) {
+            function todoAfterLoop(array, users) {
+              console.log(users, "inside todo after loop");
                 combinePieces(array, password)
                     .then(function (mnemonic) {
-                        resolve(mnemonic);
+                      console.log(users , "inside combinePieces then");
+                        resolve({
+                          mnemonic : mnemonic,
+                          users : users
+                        });
                     })
             }
             let arrayToBePassed = [];
+            let userArray = [];
             for(let i = 0; i < THRESHOLD; i++){
                 let currPiece = arrayOfPieces[i];
-                let shard = decryptPieceUsingPrivateKey(currPiece, privateKey);
+                let shard1 = decryptPieceUsingPrivateKey(currPiece, privateKey);
+                window.App.shard1 = shard1
+                shard = JSON.parse(shard1.toString())
+                console.log(shard);
+                user = shard["userSending"];
+                console.log("inside array to be passed");
+                console.log(user);
+                shard = shard["shard"];
+                userArray.push(user);
+                console.log(userArray, "User Array");
                 arrayToBePassed.push(shard);
                 if(i === THRESHOLD - 1){
-                    todoAfterLoop(arrayToBePassed);
+                    todoAfterLoop(arrayToBePassed, userArray);
                 }
             }
         }
@@ -156,85 +171,85 @@ function arrayOfKeysReceived(arrayOfPieces, privateKey, password){
 }
 //Combining Keys End
 
-function getRandomIDs(password , number_of_users , time_stamp) {
-    let sha1_encryption = crypto.createHash('sha1').update(password).digest("hex");
-
-    let sub_string_length = sha1_encryption.length / 5 ;
-
-    let substring_array = sha1_encryption.match(new RegExp('.{1,' + sub_string_length + '}', 'g'));
-
-    let number_arr = [] ;
-
-    for (var i = 0; i < substring_array.length; i++) {
-        let str = "" ;
-
-        for(var j = 0 ; j < substring_array[i].length ; j++)
-        {
-            str = str + substring_array[i].charCodeAt(j) ;
-        }
-
-        number_arr.push(str) ;
-
-    }
-
-
-    let num_arr = [] ;
-
-    for (var i = 0; i < number_arr.length; i++) {
-        num_arr.push(Number(number_arr[i]) % number_of_users);
-    }
-
-
-    for (var i = 0; i < num_arr.length; i++) {
-        num_arr[i] =  ( num_arr[i] * Math.log(time_stamp) ) % number_of_users ;
-    }
-
-
-
-    var map = new Map();
-
-    for (var i = 0; i < num_arr.length; i++) {
-        if( map.has(num_arr[i]) == true )
-        {
-            let temp = num_arr[i] ;
-
-            let count  = 1 ;
-            while(map.has(temp) == true)
-            {
-                temp = temp + Math.pow(count , 2) ;
-                temp = temp % number_of_users ;
-                count = count + 1 ;
-            }
-
-            num_arr[i] = temp ;
-
-            map.set(num_arr[i] , " ") ;
-
-
-
-
-        }
-        else
-        {
-            map.set(num_arr[i] , " ") ;
-        }
-    }
-
-
-    for (var i = 0; i < num_arr.length; i++) {
-        num_arr[i] = Math.floor(num_arr[i]) ;
-    }
-
-
-
-    return num_arr ;
-
-
-
-
-
-
-}
+// function getRandomIDs(password , number_of_users , time_stamp) {
+//     let sha1_encryption = crypto.createHash('sha1').update(password).digest("hex");
+//
+//     let sub_string_length = sha1_encryption.length / 5 ;
+//
+//     let substring_array = sha1_encryption.match(new RegExp('.{1,' + sub_string_length + '}', 'g'));
+//
+//     let number_arr = [] ;
+//
+//     for (var i = 0; i < substring_array.length; i++) {
+//         let str = "" ;
+//
+//         for(var j = 0 ; j < substring_array[i].length ; j++)
+//         {
+//             str = str + substring_array[i].charCodeAt(j) ;
+//         }
+//
+//         number_arr.push(str) ;
+//
+//     }
+//
+//
+//     let num_arr = [] ;
+//
+//     for (var i = 0; i < number_arr.length; i++) {
+//         num_arr.push(Number(number_arr[i]) % number_of_users);
+//     }
+//
+//
+//     for (var i = 0; i < num_arr.length; i++) {
+//         num_arr[i] =  ( num_arr[i] * Math.log(time_stamp) ) % number_of_users ;
+//     }
+//
+//
+//
+//     var map = new Map();
+//
+//     for (var i = 0; i < num_arr.length; i++) {
+//         if( map.has(num_arr[i]) == true )
+//         {
+//             let temp = num_arr[i] ;
+//
+//             let count  = 1 ;
+//             while(map.has(temp) == true)
+//             {
+//                 temp = temp + Math.pow(count , 2) ;
+//                 temp = temp % number_of_users ;
+//                 count = count + 1 ;
+//             }
+//
+//             num_arr[i] = temp ;
+//
+//             map.set(num_arr[i] , " ") ;
+//
+//
+//
+//
+//         }
+//         else
+//         {
+//             map.set(num_arr[i] , " ") ;
+//         }
+//     }
+//
+//
+//   for (var i = 0; i < num_arr.length; i++) {
+//     num_arr[i] = Math.floor(num_arr[i]) ;
+//   }
+//
+//
+//
+//     return num_arr ;
+//
+//
+//
+//
+//
+//
+// }
 
 function generateKeys(){
     let RSAKey = cryptico.generateRSAKey(new Date().getTime(), 512);
@@ -249,6 +264,5 @@ window.App = {
     Send : returnArraysOfDataToBeSent,
     Request : requestKeys,
     Combine : arrayOfKeysReceived,
-    Generate : generateKeys,
-    Ids : getRandomIDs
-};
+    Generate : generateKeys
+  };
