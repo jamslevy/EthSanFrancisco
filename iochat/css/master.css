@@ -1,8 +1,49 @@
+@import url('https://fonts.googleapis.com/css?family=Pacifico');
+
+html , body{
+  height: 100%;
+  background-color: #008577;
+  font-weight: bold !important;
+}
+
 #main{
-  padding-top: 100px;
+  padding: 7vw;
+  height: 100%;
 }
 
 
 .hidden{
   display: none !important;
+}
+
+
+.custom-style
+{
+  font-family: 'Pacifico', cursive;
+  color: rgba(255, 255, 255, 0.94);
+  font-size: 4.5em !important;
+}
+
+
+button{
+  min-width: 300px;
+  min-height: 50px;
+  background-color: #00d1b2;
+  border-color:  #008577 !important;
+  color: #ffffff !important;
+}
+
+
+.button-class
+{
+  margin-top: 15px;
+}
+
+form input{
+  min-height: 40px;
+  border-color:  #008577 !important;
+}
+
+.button{
+  background-color: #3ea295 !important;
 }

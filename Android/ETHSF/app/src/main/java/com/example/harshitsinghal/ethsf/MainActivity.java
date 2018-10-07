@@ -32,6 +32,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        browser.loadUrl("http://10.7.12.105:3000/app");
+        browser.loadUrl("http://10.7.13.53:3000/app/");
     }
 }
