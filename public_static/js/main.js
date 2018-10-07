@@ -3,6 +3,8 @@ $(function(){
     var SAMPLE_PASSWORD = 'hello123';
     var SAMPLE_USERNAME = 'username';
     $('button').first().click(function(){
+      $('#info-box').addClass('hidden');
+
       if($('#registration-form').hasClass('hidden')){
           $('#registration-form').removeClass('hidden');
           if(!$('#login-form').hasClass('hidden')){
@@ -12,6 +14,10 @@ $(function(){
 
     })
     $('button').last().click(function(){
+
+      $('#info-box').addClass('hidden');
+
+
       if($('#login-form').hasClass('hidden')){
           $('#login-form').removeClass('hidden');
           if(!$('#registration-form').hasClass('hidden')){

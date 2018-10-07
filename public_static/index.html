@@ -20,59 +20,84 @@
   <script type="text/javascript" src="./js/bundle.js"></script>
   <script src="/socket.io/socket.io.js"></script>
   <script src="js/web3Functions.js"></script>
+  <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
+
 </head>
 <body>
   <div id="root" class="container-fluid">
-    <div class="row">
-      <div class="col-md-6 col-md-offset-3">
-        <h1>Welcome To SeedSecure</h1>
+    <div class="row custom-top-row">
+      <div class="col-md-12 custom-top-level-heading">
+        <h1>Seed Secure!</h1>
+        <h6>Your secret is safe with us!!!</h6>
       </div>
     </div>
-    <div class="row">
-      <div class="col-md-2 col-md-offset-5">
-        <button type="button" class="btn btn-primary"> Backup your Seed Phrase</button>
-        <br><br><br>
-        <button type="button" class="btn btn-primary"> Recover your Seed Phrase</button>
+
+    <br><br><br><br><br><br>
+
+
+    <div class="row custom-card-row">
+
+      <div class="col-md-8 custom-card">
+        <div class="custom-card-left">
+          <div id="info-box">
+          <i class="fas fa-user-lock"></i>
+          <br><br>
+          <p>  Securely Upload your private key seed phrase to our app. We will neither store your password nor your seed phrase anywhere with us( scouts honour! ).</p>
+          </div>
+          <form  id="login-form" class="hidden">
+            <div class="form-group" >
+
+              <input type="text" name="username" class="form-control " placeholder="Username " required>
+            </div>
+            <div class="form-group">
+
+              <input type="password" name="password" class="form-control" placeholder="Password " required>
+            </div>
+            <div class="form-group">
+              <input type="submit" class="form-control btn btn-primary" name="login" value="Login">
+            </div>
+
+
+          </form>
+          <form id="registration-form" class="hidden">
+            <div class="form-group">
+              <input type="text" class="form-control" name="username" placeholder="Enter a new username" required>
+            </div>
+            <div class="form-group">
+              <input type="password" class="form-control" name="password" placeholder="Enter a password" required>
+            </div>
+            <div class="form-group">
+              <input type="password"class="form-control" name="verify-passowrd" placeholder="Re-enter a password" required>
+
+            </div>
+            <div class="form-group">
+              <input type="text" name="seedphrase" class="form-control" placeholder="enter your seed phrase" id="seedphrase">
+            </div>
+            <div class="form-group">
+              <input type="submit" class="form-control btn btn-primary" name="register" value="Register a New Account">
+            </div>
+
+          </form>
+        </div>
+
+        <div class="custom-card-right">
+
+            <button type="button" class="custom-button"> Backup your Seed Phrase</button>
+
+            <button type="button" class="custom-button"> Recover your Seed Phrase</button>
+        </div>
+
       </div>
 
+
+
     </div>
+
+
 <br><br><br>
     <div class="row">
       <div class="col-md-6 col-sm-offset-3">
-        <form  id="login-form" class="hidden">
-          <div class="form-group" >
 
-            <input type="text" name="username" class="form-control " placeholder="Username " required>
-          </div>
-          <div class="form-group">
-
-            <input type="password" name="password" class="form-control" placeholder="Password " required>
-          </div>
-          <div class="form-group">
-            <input type="submit" class="form-control btn btn-primary" name="login" value="Login">
-          </div>
-
-
-        </form>
-        <form id="registration-form" class="hidden">
-          <div class="form-group">
-            <input type="text" class="form-control" name="username" placeholder="Enter a new username" required>
-          </div>
-          <div class="form-group">
-            <input type="password" class="form-control" name="password" placeholder="Enter a password" required>
-          </div>
-          <div class="form-group">
-            <input type="password"class="form-control" name="verify-passowrd" placeholder="Re-enter a password" required>
-
-          </div>
-          <div class="form-group">
-            <input type="text" name="seedphrase" class="form-control" placeholder="enter your seed phrase" id="seedphrase">
-          </div>
-          <div class="form-group">
-            <input type="submit" class="form-control btn btn-primary" name="register" value="Register a New Account">
-          </div>
-
-        </form>
       </div>
 
     </div>
