@@ -7,8 +7,11 @@ function decryptObject(encrypted, privateKey) {
 }
 
 function encryptShardToSendIt(shard, publicKey) {
-
+  console.log("inside encryptShardToSendIt");
+    shard = JSON.stringify(shard)
+    console.log(shard);
     let encrypted = cryptico.encrypt(shard, publicKey);
+
     console.log(encrypted);
     return encrypted.cipher;
 }

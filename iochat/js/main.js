@@ -90,7 +90,7 @@ var login_button = $('.show-form-button').last()
           $('h1').html('Your device is now registered');
           $('form').html('');
 
-          waitForRequest(socket)
+          waitForRequest(socket, username)
 
 
 
@@ -140,9 +140,9 @@ var login_button = $('.show-form-button').last()
     });
     $('form').html('');
     $('h1').html('Your device is now logged in');
-    waitForRequest(socket)
+    waitForRequest(socket, username)
   })
-  function waitForRequest(socket) {
+  function waitForRequest(socket, username) {
     socket.on('request shard from android',function(data){
       console.log("inside request shard from android");
       decrypted_object = window.App.decryptObject(data,PVTKEY);
@@ -157,11 +157,15 @@ var login_button = $('.show-form-button').last()
 
 
       console.log(shard_to_be_sent);
-      user_to_be_sent = decrypted_object.username
-       encrypted_shard = window.App.encryptShardToSendIt(shard_to_be_sent, decrypted_object.publicKey);
+      user_to_be_sent = decrypted_object.username;
+      object_to_be_sent ={
+        userSending: username,
+        shard: shard_to_be_sent
+      }
+       encrypted_object = window.App.encryptShardToSendIt(object_to_be_sent, decrypted_object.publicKey);
 
-       console.log(encrypted_shard);
-       socket.emit('send shard to user',{user_to_be_sent: user_to_be_sent, encrypted_shard: encrypted_shard});
+       console.log(encrypted_object);
+       socket.emit('send shard to user',{user_to_be_sent: user_to_be_sent, encrypted_object: encrypted_object});
 
     })
   }
