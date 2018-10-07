@@ -11,7 +11,8 @@
     "nodemon": "^1.18.4",
     "socket.io": "^2.1.1",
     "sssa-js": "^0.0.1",
-    "watchify": "^3.11.0"
+    "watchify": "^3.11.0",
+    "web3": "^1.0.0-beta.36"
   },
   "scripts": {
     "build-web": "watchify WebIndex.js -o public_static/js/bundle.js",

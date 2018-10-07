@@ -2,7 +2,6 @@ const bip39 = require('bip39');
 const crypto = require('crypto');
 const sssa = require('sssa-js');
 const cryptico = require('cryptico');
-// const Cryptr = require('cryptr');
 const CryptoJS = require('crypto-js');
 const SHARE_COUNT = 3;
 const THRESHOLD = 2;
@@ -20,7 +19,7 @@ function mnemonicToSSS(mnemonic, password, callback) {
 }
 
 function createKey(usernameOfHolder, usernameOfSaver, password) {
-    let combinedUsername = usernameOfHolder + usernameOfSaver;
+    let combinedUsername = usernameOfHolder + password + usernameOfSaver;
     let encKey = crypto.createHash('sha256').update(combinedUsername).digest('base64');
     console.log(encKey);
     return encKey;
@@ -157,79 +156,78 @@ function arrayOfKeysReceived(arrayOfPieces, privateKey, password){
 }
 //Combining Keys End
 
-function getRandomIDs(password , number_of_users , time_stamp)
-{
-  let sha1_encryption = crypto.createHash('sha1').update(password).digest("hex");
+function getRandomIDs(password , number_of_users , time_stamp) {
+    let sha1_encryption = crypto.createHash('sha1').update(password).digest("hex");
 
-  let sub_string_length = sha1_encryption.length / 5 ;
+    let sub_string_length = sha1_encryption.length / 5 ;
 
-  let substring_array = sha1_encryption.match(new RegExp('.{1,' + sub_string_length + '}', 'g'));
+    let substring_array = sha1_encryption.match(new RegExp('.{1,' + sub_string_length + '}', 'g'));
 
-  let number_arr = [] ;
+    let number_arr = [] ;
 
-  for (var i = 0; i < substring_array.length; i++) {
-    let str = "" ;
+    for (var i = 0; i < substring_array.length; i++) {
+        let str = "" ;
 
-    for(var j = 0 ; j < substring_array[i].length ; j++)
-    {
-      str = str + substring_array[i].charCodeAt(j) ;
-    }
-
-    number_arr.push(str) ;
-
-  }
-
-
-  let num_arr = [] ;
-
-  for (var i = 0; i < number_arr.length; i++) {
-      num_arr.push(Number(number_arr[i]) % number_of_users);
-  }
-
-
-  for (var i = 0; i < num_arr.length; i++) {
-    num_arr[i] =  ( num_arr[i] * Math.log(time_stamp) ) % number_of_users ;
-  }
-
-
-
-  var map = new Map();
-
-  for (var i = 0; i < num_arr.length; i++) {
-      if( map.has(num_arr[i]) == true )
-      {
-        let temp = num_arr[i] ;
-
-        let count  = 1 ;
-        while(map.has(temp) == true)
+        for(var j = 0 ; j < substring_array[i].length ; j++)
         {
-          temp = temp + Math.pow(count , 2) ;
-          temp = temp % number_of_users ;
-          count = count + 1 ;
+            str = str + substring_array[i].charCodeAt(j) ;
         }
 
-        num_arr[i] = temp ;
+        number_arr.push(str) ;
 
-        map.set(num_arr[i] , " ") ;
-
-
+    }
 
 
-      }
-      else
-      {
-        map.set(num_arr[i] , " ") ;
-      }
-  }
+    let num_arr = [] ;
+
+    for (var i = 0; i < number_arr.length; i++) {
+        num_arr.push(Number(number_arr[i]) % number_of_users);
+    }
 
 
-  for (var i = 0; i < num_arr.length; i++) {
-    num_arr[i] = Math.floor(num_arr[i]) ; 
-  }
+    for (var i = 0; i < num_arr.length; i++) {
+        num_arr[i] =  ( num_arr[i] * Math.log(time_stamp) ) % number_of_users ;
+    }
 
 
 
-  return num_arr ;
+    var map = new Map();
+
+    for (var i = 0; i < num_arr.length; i++) {
+        if( map.has(num_arr[i]) == true )
+        {
+            let temp = num_arr[i] ;
+
+            let count  = 1 ;
+            while(map.has(temp) == true)
+            {
+                temp = temp + Math.pow(count , 2) ;
+                temp = temp % number_of_users ;
+                count = count + 1 ;
+            }
+
+            num_arr[i] = temp ;
+
+            map.set(num_arr[i] , " ") ;
+
+
+
+
+        }
+        else
+        {
+            map.set(num_arr[i] , " ") ;
+        }
+    }
+
+
+    for (var i = 0; i < num_arr.length; i++) {
+        num_arr[i] = Math.floor(num_arr[i]) ;
+    }
+
+
+
+    return num_arr ;
 
 
 
@@ -237,7 +235,6 @@ function getRandomIDs(password , number_of_users , time_stamp)
 
 
 }
-
 
 function generateKeys(){
     let RSAKey = cryptico.generateRSAKey(new Date().getTime(), 512);
