@@ -5,3 +5,4 @@ yarn.lock
 iochat/js/bundle.js
 public_static/js/bundle.js
 .DS_Store
+package-lock.json
