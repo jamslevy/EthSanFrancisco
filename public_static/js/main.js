@@ -95,8 +95,10 @@ $(function(){
 
     $('input[name=register]').click(function(e){
       e.preventDefault();
+      console.log("me clicked");
       SAMPLE_PASSWORD = $('#registration-form input[name=password]');
       SAMPLE_USERNAME = $('#registration-form input[name=username]');
+
       var input_new_seedphrase = $('#seedphrase').val();
       const socket = io();
       socket.on('connect', function () {
